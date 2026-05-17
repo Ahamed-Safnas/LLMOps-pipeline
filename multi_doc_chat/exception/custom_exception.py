@@ -2,12 +2,25 @@ import sys
 import traceback
 from typing import Optional, cast
 
+'''When an error happens in your project, this class captures the error message, 
+file name, line number, and full traceback, then formats everything into a clean readable error.'''
+
+'''
+Instead of getting a vague error like:
+    [File not found]
+
+you get something like:
+    [Error in [src/data_loader.py] at line [42] | Message: File not found
+    Traceback:]
+'''
+
+
 
 class DocumentPortalException(Exception):
     def __init__(self, error_message, error_details: Optional[object] = None):
         # Normalize message
         if isinstance(error_message, BaseException):
-            norm_msg = str(error_message)
+            norm_msg = f"{type(error_message).__name__}: {str(error_message)}"
         else:
             norm_msg = str(error_message)
 
