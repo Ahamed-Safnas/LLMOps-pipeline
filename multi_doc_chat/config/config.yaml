@@ -1,0 +1,47 @@
+paths:
+  data_dir: "data"
+  input_files:
+    - "data/BCWEEK2.pdf"
+  vector_store_dir: "artifacts/faiss_index"
+
+document_loader:
+  encoding: "utf8"
+  pdf:
+    strategy: "rapidocr"
+
+text_splitter:
+  chunk_size: 200
+  chunk_overlap: 20
+
+embeddings:
+  provider: "huggingface"
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"
+  model_kwargs:
+    device: "cpu"
+
+vector_store:
+  provider: "faiss"
+  persist: true
+
+retriever:
+  top_k: 10
+  search_type: "mmr"
+  fetch_k: 20
+  lambda_mult: 0.5
+
+llm:
+  provider: "google"
+  model_name: "gemini-1.5-flash"
+  temperature: 0.2
+  max_output_tokens: 2048
+  api_key_env:
+    - "GOOGLE_API_KEY"
+    - "GEMINI_API_KEY"
+
+prompt:
+  template: |
+    Answer the question based only on the following context:
+
+    {context}
+
+    Question: {question}
