@@ -6,6 +6,8 @@ import structlog
 """"Whenever your app runs, it creates a logs/ folder, creates a new .log file with 
 the current date/time, and saves logs in JSON format using structlog."""
 
+
+#  CustomLogger ---> GLOBAL_LOGGER 
 class CustomLogger:
     def __init__(self, log_dir="logs"):
         self.logs_dir = os.path.join(os.getcwd(), log_dir)
