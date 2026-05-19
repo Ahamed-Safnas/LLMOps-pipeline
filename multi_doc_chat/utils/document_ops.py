@@ -5,9 +5,10 @@ from langchain_core.documents import Document
 from langchain_community.document_loaders import PyPDFLoader, Docx2txtLoader, TextLoader
 from multi_doc_chat.logger import GLOBAL_LOGGER as log
 from multi_doc_chat.exception.custom_exception import DocumentPortalException
-
-if TYPE_CHECKING:
-    from fastapi import UploadFile
+from fastapi import UploadFile
+# if TYPE_CHECKING: 
+# from fastapi import UploadFile
+    
 
 SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt"}
 
