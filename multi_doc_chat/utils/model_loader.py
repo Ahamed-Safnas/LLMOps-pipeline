@@ -68,7 +68,7 @@ class ModelLoader:
         if embedding_provider == "google":
             required.add("GOOGLE_API_KEY")
 
-        provider_key = os.getenv("LLM_PROVIDER", "google")
+        provider_key = os.getenv("LLM_PROVIDER", "groq")
         llm_provider = self.config.get("llm", {}).get(provider_key, {}).get("provider")
         if llm_provider == "google":
             required.add("GOOGLE_API_KEY")
@@ -111,7 +111,7 @@ class ModelLoader:
         Load and return the configured LLM model.
         """
         llm_block = self.config["llm"]
-        provider_key = os.getenv("LLM_PROVIDER", "google")
+        provider_key = os.getenv("LLM_PROVIDER", "groq")
 
         if provider_key not in llm_block:
             log.error("LLM provider not found in config", provider=provider_key)
