@@ -113,7 +113,7 @@ async def chat(req: ChatRequest) -> ChatResponse:
             index_path=index_path,
             search_type="mmr",
             fetch_k=20,
-            lambda_mult=0.5
+            lambda_mult=0.5  # if we keep this 1 then it becomes regular similarity search, if 0 then pure diversity search, 0.5 is a balanced mix of both
         )
 
         # Use simple in-memory history and convert to BaseMessage list
