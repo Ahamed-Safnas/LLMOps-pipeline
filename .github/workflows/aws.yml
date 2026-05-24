@@ -13,7 +13,7 @@ env:
   ECR_REPOSITORY: llmopsrepolive
   ECS_SERVICE: llmops-live-service
   ECS_CLUSTER: llmops-live-cluster
-  ECS_TASK_DEFINITION: .github/workflows/task_defination.json
+  ECS_TASK_DEFINITION: .github/workflows/task_definition.json
   CONTAINER_NAME: llmops-live-container
 
 permissions:
