@@ -19,10 +19,11 @@ ENV UV_LINK_MODE=copy
 ENV PYTHONPATH="/app:/app/multi_doc_chat"
 
 # Copy dependency manifests for better layer caching
-COPY requirements.txt ./
+COPY pyproject.toml uv.lock README.md ./
+COPY multi_doc_chat ./multi_doc_chat
 
-# Install dependencies into the system interpreter using uv pip
-RUN uv pip install --system -r requirements.txt
+# Install project dependencies into the system interpreter
+RUN uv pip install --system .
 
 # Copy project files
 COPY . .
@@ -32,7 +33,4 @@ COPY . .
 EXPOSE 8080
 
 # Run FastAPI with uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
-
-# Replace last CMD in prod
-#CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "4"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "2"]

@@ -2,9 +2,9 @@ name: CI
 
 on:   # which events trigger the workflow ,here we trigger on push and pull request to main branch
   push:
-    branches: [ main ]
+    branches: [ main, DeployOnAWS ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, DeployOnAWS ]
 
 jobs: # what to do in this workflow 
   test:

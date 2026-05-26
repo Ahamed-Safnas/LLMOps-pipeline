@@ -23,6 +23,7 @@ permissions:
 jobs:
   check-status:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push') }}
     steps:
       - name: CI passed on main branch
@@ -35,6 +36,7 @@ jobs:
     name: Build & Push Docker Image
     needs: [check-status]
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     outputs:
       image: ${{ steps.build-image.outputs.image }}
     steps:
@@ -73,6 +75,7 @@ jobs:
     name: Deploy to ECS Fargate
     needs: build-and-push
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -102,5 +105,6 @@ jobs:
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
+          wait-for-minutes: 10
       - name: Done!
         run: echo "Deployed to ECS Fargate Successfully"
