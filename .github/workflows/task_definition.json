@@ -24,11 +24,15 @@
           {
             "name": "ENV",
             "value": "production"
+          },
+          {
+            "name": "LLM_PROVIDER",
+            "value": "groq"
           }
         ],
         "secrets": [
           {
-            "name": "apikeyliveclass",
+            "name": "GROQ_API_KEY",
             "valueFrom": "arn:aws:secretsmanager:eu-north-1:502456973768:secret:apikeyliveclass-B5YepJ"
           }
   
@@ -41,6 +45,13 @@
             "awslogs-stream-prefix": "ecs",
             "awslogs-create-group": "true"
           }
+        },
+        "healthCheck": {
+          "command": ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"],
+          "interval": 30,
+          "timeout": 5,
+          "retries": 3,
+          "startPeriod": 60
         }
       }
     ]
