@@ -1,8 +1,7 @@
 # Use official Python image
 FROM python:3.11-slim
 
-# Set environment variables 
-# this will remove files _pycache_ and prevent Python from writing .pyc files, which can save disk space and reduce clutter in the container.
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
@@ -19,11 +18,10 @@ ENV UV_LINK_MODE=copy
 ENV PYTHONPATH="/app:/app/multi_doc_chat"
 
 # Copy dependency manifests for better layer caching
-COPY pyproject.toml uv.lock README.md ./
-COPY multi_doc_chat ./multi_doc_chat
+COPY requirements.txt ./
 
-# Install project dependencies into the system interpreter
-RUN uv pip install --system .
+# Install dependencies into the system interpreter using uv pip
+RUN uv pip install --system -r requirements.txt
 
 # Copy project files
 COPY . .
@@ -33,4 +31,7 @@ COPY . .
 EXPOSE 8080
 
 # Run FastAPI with uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "2"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+
+# Replace last CMD in prod
+#CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "4"]
