@@ -1,14 +1,14 @@
 {
-    "family": "llmopstdlive",  
+    "family": "llmopstdlive",
     "networkMode": "awsvpc",
-    "executionRoleArn": "arn:aws:iam::502456973768:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::306570692493:role/ecsTaskExecutionRole",
     "requiresCompatibilities": ["FARGATE"],
     "cpu": "1024",
     "memory": "8192",
     "containerDefinitions": [
       {
         "name": "llmops-live-container",
-        "image": "502456973768.dkr.ecr.eu-north-1.amazonaws.com/llmopsrepolive",
+        "image": "306570692493.dkr.ecr.us-east-1.amazonaws.com/llmopsrepolive",
         "cpu": 1024,
         "essential": true,
         "portMappings": [
@@ -24,16 +24,12 @@
           {
             "name": "ENV",
             "value": "production"
-          },
-          {
-            "name": "LLM_PROVIDER",
-            "value": "groq"
           }
         ],
         "secrets": [
           {
-            "name": "GROQ_API_KEY",
-            "valueFrom": "arn:aws:secretsmanager:eu-north-1:502456973768:secret:apikeyliveclass-B5YepJ"
+            "name": "apikeyliveclass",
+            "valueFrom": "arn:aws:secretsmanager:us-east-1:306570692493:secret:apikeyliveclass-EykEZf"
           }
   
         ],
@@ -41,20 +37,12 @@
           "logDriver": "awslogs",
           "options": {
             "awslogs-group": "/ecs/llmopstdlive",
-            "awslogs-region": "eu-north-1",
+            "awslogs-region": "us-east-1",
             "awslogs-stream-prefix": "ecs",
             "awslogs-create-group": "true"
           }
-        },
-        "healthCheck": {
-          "command": ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"],
-          "interval": 30,
-          "timeout": 5,
-          "retries": 3,
-          "startPeriod": 60
         }
       }
     ]
   }
   
-
