@@ -9,11 +9,11 @@ on:
       - completed
   workflow_call:
 env:
-  AWS_REGION: eu-north-1 
+  AWS_REGION: us-east-1
   ECR_REPOSITORY: llmopsrepolive
   ECS_SERVICE: llmops-live-service
-  ECS_CLUSTER: llmops-live-cluster-1
-  ECS_TASK_DEFINITION: .github/workflows/task_definition.json
+  ECS_CLUSTER: llmops-live-cluster
+  ECS_TASK_DEFINITION: .github/workflows/task_defination.json
   CONTAINER_NAME: llmops-live-container
 
 permissions:
@@ -23,7 +23,6 @@ permissions:
 jobs:
   check-status:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     if: ${{ github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push') }}
     steps:
       - name: CI passed on main branch
@@ -36,7 +35,6 @@ jobs:
     name: Build & Push Docker Image
     needs: [check-status]
     runs-on: ubuntu-latest
-    timeout-minutes: 60
     outputs:
       image: ${{ steps.build-image.outputs.image }}
     steps:
@@ -75,7 +73,6 @@ jobs:
     name: Deploy to ECS Fargate
     needs: build-and-push
     runs-on: ubuntu-latest
-    timeout-minutes: 20
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -99,12 +96,11 @@ jobs:
       - name: Print Rendered Task
         run: cat ${{ steps.render-task.outputs.task-definition }}
       - name: Deploy to ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ${{ steps.render-task.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
-          wait-for-minutes: 10
       - name: Done!
         run: echo "Deployed to ECS Fargate Successfully"
