@@ -1,22 +1,22 @@
 name: CI
 
-on:   # which events trigger the workflow ,here we trigger on push and pull request to main branch
+on:
   push:
-    branches: [ main, DeployOnAWS ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, DeployOnAWS ]
+    branches: [ main ]
 
-jobs: # what to do in this workflow 
+jobs:
   test:
-    runs-on: ubuntu-latest # GitHub creates a temporary Linux machine.
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4 # Downloads your GitHub repo into the CI machine.
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v4
@@ -33,5 +33,3 @@ jobs: # what to do in this workflow
           LLM_PROVIDER: google
         run: |
           uv run pytest -q
-
-          
